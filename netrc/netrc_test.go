@@ -33,12 +33,12 @@ func eqMachine(a *Machine, b *Machine) bool {
 }
 
 func testExpected(n *Netrc, t *testing.T) {
-	if len(expectedMachines) != len(n.machines) {
-		t.Errorf("expected %d machines, got %d", len(expectedMachines), len(n.machines))
+	if len(expectedMachines) != len(n.Machines) {
+		t.Errorf("expected %d machines, got %d", len(expectedMachines), len(n.Machines))
 	} else {
 		for i, e := range expectedMachines {
-			if !eqMachine(e, n.machines[i]) {
-				t.Errorf("bad machine; expected %v, got %v\n", e, n.machines[i])
+			if !eqMachine(e, n.Machines[i]) {
+				t.Errorf("bad machine; expected %v, got %v\n", e, n.Machines[i])
 			}
 		}
 	}
@@ -269,7 +269,7 @@ func TestNewMachine(t *testing.T) {
 
 func testNewMachine(t *testing.T, n *Netrc) {
 	for _, test := range newMachineTests {
-		mcount := len(n.machines)
+		mcount := len(n.Machines)
 		// sanity check
 		bodyb, _ := n.MarshalText()
 		body := string(bodyb)
@@ -290,8 +290,8 @@ func testNewMachine(t *testing.T, n *Netrc) {
 			t.Fatalf("NewMachine() returned nil")
 		}
 
-		if len(n.machines) != mcount+1 {
-			t.Errorf("n.machines count expected %d, got %d", mcount+1, len(n.machines))
+		if len(n.Machines) != mcount+1 {
+			t.Errorf("n.Machines count expected %d, got %d", mcount+1, len(n.Machines))
 		}
 		// check values
 		if m.Name != test.name {
@@ -347,7 +347,7 @@ func TestNewMachineGoesBeforeDefault(t *testing.T) {
 		t.Fatal(err)
 	}
 	m := n.NewMachine("mymachine", "mylogin", "mypassword", "myaccount")
-	if m2 := n.machines[len(n.machines)-2]; m2 != m {
+	if m2 := n.Machines[len(n.Machines)-2]; m2 != m {
 		t.Errorf("expected machine %v, got %v", m, m2)
 	}
 }
@@ -361,7 +361,7 @@ func TestRemoveMachine(t *testing.T) {
 	tests := []string{"mail.google.com", "weirdlogin"}
 
 	for _, name := range tests {
-		mcount := len(n.machines)
+		mcount := len(n.Machines)
 		// sanity check
 		m := n.FindMachine(name)
 		if m == nil {
@@ -372,8 +372,8 @@ func TestRemoveMachine(t *testing.T) {
 		}
 		n.RemoveMachine(name)
 
-		if len(n.machines) != mcount-1 {
-			t.Errorf("n.machines count expected %d, got %d", mcount-1, len(n.machines))
+		if len(n.Machines) != mcount-1 {
+			t.Errorf("n.Machines count expected %d, got %d", mcount-1, len(n.Machines))
 		}
 
 		// make sure Machine is no longer returned by FindMachine()
