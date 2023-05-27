@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 	"sync"
@@ -368,7 +367,7 @@ func scanValue(scanner *bufio.Scanner, pos int) ([]byte, string, int, error) {
 }
 
 func parse(r io.Reader, pos int) (*Netrc, error) {
-	b, err := ioutil.ReadAll(r)
+	b, err := io.ReadAll(r)
 	if err != nil {
 		return nil, err
 	}
